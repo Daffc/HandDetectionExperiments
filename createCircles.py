@@ -22,28 +22,17 @@ def main():
         img = detector.findHands(img, draw=True)
         lmList = detector.findPosition(img, draw=False)
 
+        # Check if at least one list of landmarks was detected.
         if lmList:
 
-            # Chack fist Hand
-            if 0 < len(lmList):
-                dst = math.dist([lmList[4][1],lmList[4][2]], [lmList[8][1],lmList[8][2]])
+            # For each 
+            for handLmList in lmList:
+                dst = math.dist([handLmList[4][1],handLmList[4][2]], [handLmList[8][1],handLmList[8][2]])
                 
-                mx = (lmList[0][1] + lmList[5][1] + lmList[9][1] + lmList[13][1] + lmList[17][1]) / 5
-                my = (lmList[0][2] + lmList[5][2] + lmList[9][2] + lmList[13][2] + lmList[17][2]) / 5
+                mx = (handLmList[0][1] + handLmList[5][1] + handLmList[9][1] + handLmList[13][1] + handLmList[17][1]) / 5
+                my = (handLmList[0][2] + handLmList[5][2] + handLmList[9][2] + handLmList[13][2] + handLmList[17][2]) / 5
                 
-                cv2.putText(img, str(dst), (10, 95), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 255), 3)
                 cv2.circle(img, (int(mx), int(my)), int((dst / 2)), (255,255,255), cv2.FILLED)
-            
-            #Check second Hand
-            if 21 < len(lmList):
-                dst = math.dist([lmList[25][1],lmList[25][2]], [lmList[29][1],lmList[29][2]])
-                
-                mx = (lmList[25][1] + lmList[29][1]) / 2
-                my = (lmList[25][2] + lmList[29][2]) / 2
-                
-                cv2.putText(img, str(dst), (10, 135), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
-                cv2.circle(img, (int(mx), int(my)), int((dst / 2)), (255,255,255), cv2.FILLED)
-
 
         # Calculating and displaing frames
         cTime = time.time()
