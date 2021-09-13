@@ -27,22 +27,23 @@ class HandDetector():
 
         return img
 
-    # Get each position of one land lendmarks and returns it in a list (id, x, y).
+    # Get list of landmarks (id, x, y) for each detected hand.
     def findPosition(self, img, draw=True):
-
-        lmList = []
-
+        
+        HandLmList = []
         if self.results.multi_hand_landmarks :
             for hand in self.results.multi_hand_landmarks:
+                handList = []
                 for id, lm in enumerate(hand.landmark):
                     h, w, c = img.shape
                     cx, cy = int(lm.x * w), int(lm.y * h)
-                    lmList.append([id, cx, cy])
+                    handList.append([id, cx, cy])
                     
                     if draw:
                         cv2.circle(img, (cx, cy), 5, (0,255,0), cv2.FILLED)
+                HandLmList.append(handList)
 
-        return lmList
+        return HandLmList
 
 
 def main():
@@ -55,7 +56,7 @@ def main():
     while True:
         success, img = cap.read()
         img = detector.findHands(img, draw=True)
-        lmList = detector.findPosition(img, 0, draw=False)
+        lmList = detector.findPosition(img, draw=False)
 
         if lmList:
             print(lmList[0])
