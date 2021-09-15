@@ -45,11 +45,12 @@ def main():
 
     circles = []
 
-    circles.append(Circle(random.randrange(cWidth - 60) + 30, 10, 30, (0, 255, 0), random.randrange(1, 3)))
     lpTime = time.time()
     spawnInterval = random.randrange(1, 3)
 
-    while True:
+    endGame = False
+
+    while not endGame:
         success, img = cap.read()
         img = cv2.flip(img, 1)
 
@@ -82,10 +83,11 @@ def main():
             # Move circle to the next position
             circle.move()
             
-            # If center of the circle transpasses height, destroi it.
+            # If center of the circle transpasses height, end of game.
             if (circle.y >= cHeight):
                 circles.remove(circle)
                 del circle
+                endGame = True
 
         # Draw all circles.
         for circle in circles:       
@@ -99,7 +101,9 @@ def main():
 
         # If reach spaw time interval, spaw a new circle, redefining new spaw interval
         if ((cTime - lpTime) >= spawnInterval):
-            circles.append(Circle(random.randrange(cWidth - 60) + 30, 10, 30, (0, 255, 0), random.randrange(1, 3)))
+            # Defining circle velocity according to the current obtained points (increase dificulty).
+            newVelocity = random.randrange(1, 3) + int((2**(points/20)) - 1)
+            circles.append(Circle(random.randrange(cWidth - 100) + 50, 10, 30, (0, 255, 0), newVelocity))
             lpTime = time.time()
             spawnInterval = random.randrange(1, 3)
 
@@ -109,6 +113,10 @@ def main():
         
         cv2.imshow("Image", img)
         cv2.waitKey(1)
+
+    # Display final poits.
+    print("RESULT:", points)
+    
 
 if __name__ == "__main__":
     main()
