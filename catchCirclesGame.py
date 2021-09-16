@@ -95,7 +95,6 @@ def main():
 
         # Calculating and displaing frames
         cTime = time.time()
-        dTime = cTime-pTime
         fps = 1/(cTime-pTime)
         pTime = cTime
 
